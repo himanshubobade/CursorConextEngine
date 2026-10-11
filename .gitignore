@@ -1,0 +1,9 @@
+secrets.yaml
+.env
+data/
+__pycache__/
+*.pyc
+.venv/
+venv/
+web/node_modules/
+web/dist/

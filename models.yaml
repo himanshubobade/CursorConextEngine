@@ -1,0 +1,116 @@
+# Model registry. Adding a model is a config edit, not a code change - the UI
+# picker and the cost meter are both driven off this file.
+#
+# input / output / cache_write / cache_read are USD per 1,000,000 tokens.
+# Prices drift; update them here rather than anywhere in the code.
+
+models:
+  - id: claude-sonnet-4-5
+    provider: anthropic
+    api_model: claude-sonnet-4-5-20250929
+    label: Claude Sonnet 4.5
+    context_window: 200000
+    max_output_tokens: 16000
+    supports_tools: true
+    supports_prompt_cache: true
+    input: 3.00
+    output: 15.00
+    cache_write: 3.75
+    cache_read: 0.30
+
+  - id: claude-opus-4-1
+    provider: anthropic
+    api_model: claude-opus-4-1-20250805
+    label: Claude Opus 4.1
+    context_window: 200000
+    max_output_tokens: 16000
+    supports_tools: true
+    supports_prompt_cache: true
+    input: 15.00
+    output: 75.00
+    cache_write: 18.75
+    cache_read: 1.50
+
+  - id: claude-haiku-3-5
+    provider: anthropic
+    api_model: claude-3-5-haiku-20241022
+    label: Claude Haiku 3.5
+    context_window: 200000
+    max_output_tokens: 8192
+    supports_tools: true
+    supports_prompt_cache: true
+    input: 0.80
+    output: 4.00
+    cache_write: 1.00
+    cache_read: 0.08
+
+  - id: gpt-4.1
+    provider: openai
+    api_model: gpt-4.1
+    label: GPT-4.1
+    context_window: 1000000
+    max_output_tokens: 16000
+    supports_tools: true
+    supports_prompt_cache: true
+    input: 2.00
+    output: 8.00
+    cache_read: 0.50
+
+  - id: gpt-4.1-mini
+    provider: openai
+    api_model: gpt-4.1-mini
+    label: GPT-4.1 mini
+    context_window: 1000000
+    max_output_tokens: 16000
+    supports_tools: true
+    supports_prompt_cache: true
+    input: 0.40
+    output: 1.60
+    cache_read: 0.10
+
+  - id: gpt-4o
+    provider: openai
+    api_model: gpt-4o
+    label: GPT-4o
+    context_window: 128000
+    max_output_tokens: 16000
+    supports_tools: true
+    supports_prompt_cache: true
+    input: 2.50
+    output: 10.00
+    cache_read: 1.25
+
+  - id: gemini-2.5-pro
+    provider: google
+    api_model: gemini-2.5-pro
+    label: Gemini 2.5 Pro
+    context_window: 1000000
+    max_output_tokens: 16000
+    supports_tools: true
+    supports_prompt_cache: false
+    input: 1.25
+    output: 10.00
+
+  - id: gemini-2.5-flash
+    provider: google
+    api_model: gemini-2.5-flash
+    label: Gemini 2.5 Flash
+    context_window: 1000000
+    max_output_tokens: 16000
+    supports_tools: true
+    supports_prompt_cache: false
+    input: 0.30
+    output: 2.50
+
+embeddings:
+  - id: text-embedding-3-small
+    provider: openai
+    api_model: text-embedding-3-small
+    dimensions: 1536
+    input: 0.02
+
+  - id: text-embedding-3-large
+    provider: openai
+    api_model: text-embedding-3-large
+    dimensions: 3072
+    input: 0.13

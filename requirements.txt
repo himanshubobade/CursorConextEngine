@@ -1,0 +1,14 @@
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.5
+PyYAML>=6.0
+requests>=2.31
+httpx>=0.27
+python-dotenv>=1.0
+numpy>=1.26
+pyflakes>=3.2
+
+# Optional: accelerates vector search once a metastore grows past ~50k docs.
+# The retrieval layer falls back to a numpy brute-force scan if this import
+# or the SQLite extension load fails (common on locked-down Python builds).
+sqlite-vec>=0.1.3

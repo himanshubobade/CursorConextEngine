@@ -1,0 +1,70 @@
+server:
+  host: 127.0.0.1
+  port: 8100
+
+paths:
+  # Read-only reference copy. ContextEngine never writes here: it reads the
+  # pydantic config schema, the example projects, the CI validators and
+  # jobs/job_template.json out of it.
+  framework_repo: ../azure-databricks-ingestion-framework
+  # Working clone that generated projects are committed into.
+  framework_clone: data/framework_clone
+  database: data/contextengine.db
+
+databricks:
+  # Where the framework lives in the Databricks workspace. Used both as the
+  # upload target for generated projects and as the `repo_root` job parameter.
+  workspace_repo_root: /Workspace/Shared/azure-databricks-ingestion-framework
+  # Empty list = index every catalog the token can see (minus system catalogs).
+  catalogs: []
+  skip_catalogs:
+    - system
+    - samples
+    - __databricks_internal
+  lineage_lookback_days: 90
+  # Optional: applied only to classic job clusters. Leave blank to omit.
+  cluster_policy_id: ""
+  # serverless = no cluster to wait for (Jobs serverless). classic = the
+  # framework job_template.json (Standard_DS4_v2, 1-4 workers).
+  job_compute: serverless
+  # STANDARD is cheaper; PERFORMANCE_OPTIMIZED starts faster / more capacity.
+  serverless_performance_target: STANDARD
+
+retrieval:
+  embedding_model: text-embedding-3-small
+  # Shortened embeddings (OpenAI's `dimensions` parameter). 768 keeps almost
+  # all of the retrieval quality of the full 1536 at half the memory and
+  # half the brute-force scan cost.
+  embedding_dimensions: 768
+  embedding_batch_size: 128
+  vector_top_k: 40
+  lexical_top_k: 40
+  # Reciprocal rank fusion constant. Higher = flatter weighting of ranks.
+  rrf_k: 60
+  # How far to walk the lineage graph out from each seed table.
+  lineage_hops: 2
+  # Weight of the graph-proximity prior relative to the fused text score.
+  lineage_boost: 0.35
+  # Extra weight when a table is reachable from more than one seed.
+  cooccurrence_boost: 0.25
+  rerank_candidates: 30
+  final_top_k: 8
+
+# Which registered model (see models.yaml) runs each stage. Cheap models for
+# the mechanical stages, strong models for planning and code generation.
+stages:
+  intent: gpt-4.1-mini
+  rerank: gpt-4.1-mini
+  plan: claude-sonnet-4-5
+  codegen: claude-sonnet-4-5
+  repair: claude-sonnet-4-5
+  column_docs: gpt-4.1-mini
+
+codegen:
+  # How many times a failing artifact is sent back to the model with the
+  # validator output before we surface the failure to the analyst.
+  max_repair_attempts: 2
+
+budget:
+  max_usd_per_session: 2.0
+  max_tokens_per_session: 600000
